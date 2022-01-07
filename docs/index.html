@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/png" href="fs.png">
+    <title>FullStory for Everything</title>
+    <style>
+        h1 {
+            text-align: center;
+            font-size: 32px;
+        }
+
+        @media screen and (min-width: 320px) {
+            h1 {
+                font-size: calc(32px + 40 * ((100vw - 320px) / 680));
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="header">FullStory for…</h1>
+    <button id="gen">Generate Another</button>
+</body>
+<script>
+    let words = { "nouns": [], "adjs": [] };
+    async function getWords() {
+        let res = await fetch("words.json");
+        let data = await res.json();
+        words = data;
+        generate();
+    }
+    function randomChoice(arr) {
+        return arr[Math.floor(Math.random() * arr.length)];
+    }
+    function generate() {
+        let h = document.getElementById("header");
+        let word = randomChoice(words.nouns);
+        if (Math.random() < 0.3) {
+            word = `${randomChoice(words.adjs)} ${word}`;
+        }
+        h.textContent = `FullStory for ${word}`;
+    }
+    getWords();
+
+    document.getElementById("gen").addEventListener("click", generate);
+</script>
+
+</html>
